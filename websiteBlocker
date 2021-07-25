@@ -1,0 +1,44 @@
+# Project Name : Website Blocker with Python
+# Concept requires more research on List Comprehension
+
+from datetime import datetime
+import time
+
+# where is host file path
+host_path = '/home/shaan/Desktop/hosts'
+
+# which websites do you want to block
+websites = ['facebook.com', 'www.facebook.com']
+
+redirect = '127.0.0.1'  # how to redirect ip
+
+# when do you want to block (start, end, current time)
+start_hour = 14
+end_hour = 15
+
+start_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, start_hour)
+current_time = datetime.now()
+end_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, end_hour)
+
+while True:
+    # work hour/ block hour
+    if start_time < current_time < end_time:  # if current time is in between past and future time, that's present time
+        print('work hour')  # fun hour/ unblock hour
+        with open(host_path+'/trial.txt', 'r+') as file:  # open the host file in writing mode
+            content = file.read()  # Read whole file
+            for website in websites:  # For each website in Website list
+                if website in content:  # if website is in block list already
+                    pass  # no action required
+                else:  # if website isn't in block list
+                    file.write(redirect + " " + website + "\n")  # write the redirect with website name it and save
+    else:  # if current time isn't in between past and future time, that's present time
+        print('fun hour')  # Then, it's fun hour/ unblock hour
+        with open(host_path, 'r+') as file:  # open the host file in writing mode
+            content = file.readlines()  # create a list with all lines found in host file
+            file.seek(0)  # start searching from index 0
+            for line in content:  # for each index item found in the list (each line as individual list item)
+                if not any(website in line for website in websites):  # list comprehension provides an website, check if that website not in line
+                    file.write(line)  # if that website (block site) not in line, write the line
+            file.truncate()  # if the website found in the line, remove the line thus unblocking the website from host
+
+    time.sleep(5)  # check this every 5 seconds
