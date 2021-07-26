@@ -24,7 +24,7 @@ while True:
     # work hour/ block hour
     if start_time < current_time < end_time:  # if current time is in between past and future time, that's present time
         print('work hour')  # fun hour/ unblock hour
-        with open(host_path+'/trial.txt', 'r+') as file:  # open the host file in writing mode
+        with open(host_path', 'r+') as file:  # open the host file in writing mode
             content = file.read()  # Read whole file
             for website in websites:  # For each website in Website list
                 if website in content:  # if website is in block list already
